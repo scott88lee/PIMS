@@ -20,8 +20,14 @@ wss.on('connection', function connection(ws){
     // },2000)
 
     ws.on('message', function incoming(message){
-        console.log("Recieved " + message)
-        ws.send('Recieved ' + message)
+        
+        let msg = JSON.parse(message)
+        console.log(msg)
+        // console.log(message.auth)
+
+        if (msg.auth) {
+            ws.send('This is a verified message from the server')
+        }
     })
 })
 

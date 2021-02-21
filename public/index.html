@@ -8,13 +8,10 @@
 
 <body>
     <div class='container'>
-        <div class = 'demo'>
+        <div class = 'demo' id="para">
             <H1>WEBSOCKETS BUZZER DEMO!</H1>
             <button onclick="sendData()">Click</button>
             Text
-        </div>
-        <div contentEditable="true" id="para">
-            asd
         </div>
     </div>
 
@@ -28,6 +25,11 @@
         border-radius: 8px;
         padding: 8px;
     }
+    #para {
+        padding: 8px;
+        scroll-behavior: auto;
+        
+    }
 </style>
 <script>
     const code = []
@@ -37,25 +39,44 @@
             code.shift()
         }
         if (code.toString() == "1,6,1,2"){
-            alert("You got!")
+            data = {
+                "auth" : "true"
+            }
+            socket.send(JSON.stringify(data))
         }
     })
+
+    function editable(text){
+        let node = document.createElement("textarea");// Create a <li> node
+        let textnode = document.createTextNode(text); // Create a text node
+        node.appendChild(textnode);                   // Append the text to <textarea>
+        document.getElementById("para").appendChild(node);   
+    }
+
     const socket = new WebSocket('ws://localhost:3000');
 
     // Connection opened
     socket.addEventListener('open', function (event) {
-        socket.send('Hello Server!');
+        let data = {
+            msg: "Connection established."
+        }
+        socket.send(JSON.stringify(data));
     });
 
     function sendData() {
-        let data = document.getElementById('para').innerHTML
-        socket.send(data);
+        let data = document.getElementById('para').value
+        console.log(data.trim())
+        socket.send(data.trim());
     }
 
 
     // Listen for messages
     socket.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
+        
+        if (event.data.reveal) {
+            editable(event.data.text)
+        }
     });
 </script>
 
