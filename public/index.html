@@ -1,26 +1,62 @@
 <html>
-    <head>
-        <title>
-            WebSockets Demo
-        </title>
-    </head>
-    <body>
-        <H1>WEBSOCKETS!</H1>
-        <button>
-            Click
-        </button>
-    </body>
-    <script>
-        const socket = new WebSocket('ws://localhost:3000');
 
-        // Connection opened
-        socket.addEventListener('open', function (event) {
-            socket.send('Hello Server!');
-        });
+<head>
+    <title>
+        WebSockets Demo
+    </title>
+</head>
 
-        // Listen for messages
-        socket.addEventListener('message', function (event) {
-            console.log('Message from server ', event.data);
-        });
-    </script>
+<body>
+    <div class='container'>
+        <div class = 'demo'>
+            <H1>WEBSOCKETS BUZZER DEMO!</H1>
+            <button onclick="sendData()">Click</button>
+            Text
+        </div>
+        <div contentEditable="true" id="para">
+            asd
+        </div>
+    </div>
+
+</body>
+<style>
+    .container {
+        margin: 0 auto;
+        margin-top: 20px;
+        width: 80%;
+        border: 1px solid grey;
+        border-radius: 8px;
+        padding: 8px;
+    }
+</style>
+<script>
+    const code = []
+    document.addEventListener("keyup", (e) => {
+        code.push(e.key);
+        if (code.length > 4){
+            code.shift()
+        }
+        if (code.toString() == "1,6,1,2"){
+            alert("You got!")
+        }
+    })
+    const socket = new WebSocket('ws://localhost:3000');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+        socket.send('Hello Server!');
+    });
+
+    function sendData() {
+        let data = document.getElementById('para').innerHTML
+        socket.send(data);
+    }
+
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+</script>
+
 </html>

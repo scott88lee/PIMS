@@ -1,12 +1,14 @@
 const express = require('express');
 const app = new express();
+app.use(express.static('public'));
+
 const ws_server = require('http').createServer(app);
 const websocket = require('ws');
 
 const wss =  new websocket.Server({server:ws_server})
 
-app.get("/", (req, res) => {
-    res.send("Hello world")
+app.get("*", (req, res) => {
+    res.redirect("/index.html");
 })
 
 wss.on('connection', function connection(ws){
@@ -23,5 +25,5 @@ wss.on('connection', function connection(ws){
     })
 })
 
-ws_server.listen(3000, () => { console.log("Listen 3000.") });
-app.listen(8080, () => { console.log("Listen 8080.") });
+ws_server.listen(3000, () => { console.log("WebSockets PORT: 3000.") });
+app.listen(8080, () => { console.log("HTTP PORT: 8080.") });
