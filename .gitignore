@@ -1,6 +1,7 @@
 ####### NODE
 # Data files
 *.b64
+*.raw
 
 # Logs
 logs
